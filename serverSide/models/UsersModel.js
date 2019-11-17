@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../database/schemas/UserSchema");
+const mongoose = require('mongoose')
 
 module.exports.getAllUsers = async () => {
   allUsersData = await User.find({}, function(err, users) {
@@ -53,3 +54,4 @@ module.exports.setUserByID = async function(id, obj) {
 
   return update;
 };
+

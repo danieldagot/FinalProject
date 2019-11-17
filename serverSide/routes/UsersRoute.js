@@ -1,6 +1,12 @@
 const express = require("express");
 const UsersModel = require("../models/UsersModel");
 const router = express.Router();
+const user = require("../database/schemas/UserSchema");
+const bodyParser = require('body-parser')
+router.use(bodyParser.json())
+router.use(bodyParser.urlencoded({ extended: false }))
+
+
 
 router.route("/").get(function(req, res) {
   UsersModel.getAllUsers().then(allUsers => {
@@ -26,6 +32,7 @@ router.route("/userID/:id").get(function(req, res) {
 
 router.route("/:id").put(function(req, res) {
   console.log(req.body);
+
   UsersModel.setUserByID(req.params.id, {
     Name: req.body.Name,
     Email: req.body.Email,
@@ -46,5 +53,22 @@ router.route("/:id").put(function(req, res) {
     })
     .catch(err => res.send(err));
 });
+
+
+
+router.route("/edit/:id").put(function(req, res) {
+  const id = req.params.id
+  let data = req.body
+  var body = req
+  console.log(req.body);
+  user.findOneAndUpdate({ UserID: id }, data, { upsert: true }, function (err, doc) {
+     // console.log(doc);
+      return (doc);
+  }).then(function (data) {
+      res.send(
+        "ok"
+      )
+  })
+})
 
 module.exports = router;
